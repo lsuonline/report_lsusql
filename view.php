@@ -41,6 +41,7 @@ if (!$report) {
 $permittedusers = !empty($report->userlimit) ? array_map('trim', explode(',', $report->userlimit)) : array($USER->username);
 
 $category = $DB->get_record('report_lsusql_categories', ['id' => $report->categoryid], '*', MUST_EXIST);
+$mainurl = $CFG->wwwroot . '/report/customsql/index.php';
 
 $embed = optional_param('embed', 0, PARAM_BOOL);
 $urlparams['embed'] = $embed;
