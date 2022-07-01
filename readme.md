@@ -1,4 +1,4 @@
-# LSU Report API
+# LSU Report API (Formerly AD-hoc database queries)
 
 This report plugin allows Administrators to set up arbitrary database queries
 to act as LSU API Reports. Reports can be of two types, either run on demand,
@@ -7,11 +7,12 @@ which helps when you have a lot of them.
 
 Other users with the right capability can go to Administration -> Reports ->
 LSU Report API and see a list of queries to which they have access.
-Results can be viewed on-screen or downloaded as CSV.
+Results can be viewed on-screen, downloaded as CSV, or consumed via webservice
+in any supported data format.
 
-Reports can contain placeholders, in which case, the user running the report is
-presented with a form where they can enter the values to substitute for the
-placeholders before running the report.
+Reports can contain administratively configurable placeholders, in which 
+case, the user running the report is presented with a form where they can 
+enter the values to substitute for the placeholders before running the report.
 
 Scheduled reports can also be set to be send out be email whenever they are
 generated.
@@ -25,8 +26,8 @@ Pairs of columns where one is called `name`, and the other called `name_link_url
 will be displayed as a single column containing links with link text from
 `name` and the target URL from `name_link_url`.
 
-You can set a limit on the maximum number of rows returned by a query
-(up to the hard limit of 5000).
+You can set a limit on the maximum number of rows returned by a query up 
+to an administratively configured hard limit.
 
 See http://docs.moodle.org/en/Custom_SQL_queries_report for more information.
 
@@ -36,22 +37,16 @@ See http://docs.moodle.org/en/Custom_SQL_queries_report for more information.
 This plugin was created by the Open University (http://www.open.ac.uk/), but now
 has contributions from many others, as can be seen in the git log. Thanks all.
 
+The forked version was created by Louisiana State University (https://www.lsu.edu/)
+and adds the following features.
+1. Per report user access
+1. Per report settings for unescaped content for consumable use
+1. Global settings to add more prohibited word replacements for consumable use
+
+Coupling the new features with API creates a powerful automated integrations tool.
+
 
 ## Installation and set-up
 
-This plugin should be compatible with Moodle 3.3+.
+This plugin should be compatible with Moodle 3.9+.
 
-### Install from the plugins database
-
-Install from the Moodle plugins database
-* https://moodle.org/plugins/report_lsusql
-
-### Install using git
-
-Or you can install using git. Type this commands in the root of your Moodle install
-
-    git clone https://github.com/moodleou/moodle-report_lsusql.git report/lsusql
-    echo '/report/lsusql/' >> .git/info/exclude
-
-Then run the moodle update process
-Site administration > Notifications
