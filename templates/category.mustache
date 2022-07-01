@@ -39,9 +39,10 @@
         "linkref": "https://example.com/report_lsusql/index.php?hidecat=1",
         "statistic": {
             "manual": 1,
-            "daily": 2,
-            "weekly": 3,
-            "monthly": 4
+            "hourly": 2,
+            "daily": 3,
+            "weekly": 4,
+            "monthly": 5
         },
         "querygroups": []
     }
@@ -59,6 +60,7 @@
             <span class="reportcounts">
                 {{#str}}categorycontent, report_lsusql, {
                                                                 "manual": {{#quote}}{{manual}}{{/quote}},
+                                                                "asap": {{#quote}}{{asap}}{{/quote}},
                                                                 "daily": {{#quote}}{{daily}}{{/quote}},
                                                                 "weekly": {{#quote}}{{weekly}}{{/quote}},
                                                                 "monthly": {{#quote}}{{monthly}}{{/quote}}

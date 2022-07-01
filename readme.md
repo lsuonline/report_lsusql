@@ -10,8 +10,8 @@ LSU Report API and see a list of queries to which they have access.
 Results can be viewed on-screen, downloaded as CSV, or consumed via webservice
 in any supported data format.
 
-Reports can contain administratively configurable placeholders, in which 
-case, the user running the report is presented with a form where they can 
+Reports can contain administratively configurable placeholders, in which
+case, the user running the report is presented with a form where they can
 enter the values to substitute for the placeholders before running the report.
 
 Scheduled reports can also be set to be send out be email whenever they are
@@ -26,7 +26,7 @@ Pairs of columns where one is called `name`, and the other called `name_link_url
 will be displayed as a single column containing links with link text from
 `name` and the target URL from `name_link_url`.
 
-You can set a limit on the maximum number of rows returned by a query up 
+You can set a limit on the maximum number of rows returned by a query up
 to an administratively configured hard limit.
 
 See http://docs.moodle.org/en/Custom_SQL_queries_report for more information.
@@ -42,6 +42,7 @@ and adds the following features.
 1. Per report user access
 1. Per report settings for unescaped content for consumable use
 1. Global settings to add more prohibited word replacements for consumable use
+1. Hourly scheduled task runs by Nicholas Stefanski (https://github.com/nstefanski)
 
 Coupling the new features with API creates a powerful automated integrations tool.
 
@@ -50,3 +51,13 @@ Coupling the new features with API creates a powerful automated integrations too
 
 This plugin should be compatible with Moodle 3.9+.
 
+
+## Upgrading from Ad-hoc database queries
+
+1st time installation with Ad-hoc database queries installed will trigger an "upgrade" process.
+This process is fully supported and will duplicate all reports and categories. This installation
+will work with any post 2017 version of AHDQ and will also add the required LSU functionality to
+the tables and populate any copied data.
+
+Both plugins are able to be used side-by-side or you can feel free to uninstall AHDQ as new features
+and fixes will be rolled in as added.

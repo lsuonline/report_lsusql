@@ -145,7 +145,7 @@ function report_lsusql_generate_csv($report, $timenow) {
 
     if (!empty($handle)) {
         if ($count > $querylimit) {
-            report_lsusql_write_csv_row($handle, [REPORT_LSUSQL_LIMIT_EXCEEDED_MARKER]);
+            report_lsusql_write_csv_row($handle, [REPORT_LSUSQL_LIMIT_EXCEEDED_MARKER], $donotescape);
         }
 
         fclose($handle);
@@ -298,6 +298,7 @@ function report_lsusql_runable_options($type = null) {
         return array('manual' => get_string('manual', 'report_lsusql'));
     }
     return array('manual' => get_string('manual', 'report_lsusql'),
+                 'asap' => get_string('automaticallyasap', 'report_lsusql'),
                  'daily' => get_string('automaticallydaily', 'report_lsusql'),
                  'weekly' => get_string('automaticallyweekly', 'report_lsusql'),
                  'monthly' => get_string('automaticallymonthly', 'report_lsusql')
@@ -627,8 +628,19 @@ function report_lsusql_get_month_starts($timenow) {
     );
 }
 
+function report_lsusql_get_asap_starts($timenow) {
+     $dateparts = getdate($timenow);
+
+     return array(
+         mktime($dateparts['hours'], 0, 0, $dateparts['mon'], $dateparts['mday'], $dateparts['year']),
+         mktime($dateparts['hours'] - 1, 0, 0, $dateparts['mon'], $dateparts['mday'], $dateparts['year']),
+     );
+ }
+
 function report_lsusql_get_starts($report, $timenow) {
     switch ($report->runable) {
+        case 'asap':
+             return report_lsusql_get_asap_starts($timenow);
         case 'daily':
             return report_lsusql_get_daily_time_starts($timenow, $report->at);
         case 'weekly':
