@@ -71,20 +71,26 @@ function xmldb_report_lsusql_install() {
 
         // Sanity check if the lsusql tables exist copy them.
         if ($dbman->table_exists($csqlctable)) {
+            // Create the table if the corresponding AHDQ table exists.
             $sql = "CREATE TABLE IF NOT EXISTS " . $pre . $lsqlcstring . " SELECT * FROM " . $pre . $csqlcstring;
-            // $sql = "ALTER TABLE " . $pre . $csqlcstring . " RENAME TO " . $pre . $lsqlcstring;
             $DB->execute($sql);
             mtrace("Copied <strong>$csqlcstring</strong> table to <strong>$lsqlcstring</strong>.<br><br>\n");
-            // mtrace("Renamed $csqlcstring table to $lsqlcstring.<br><br>\n");
+            // Make sure the table is auto-incrementing.
+            $sql = "ALTER TABLE " . $pre . $lsqlcstring . " CHANGE id id bigint(10) AUTO_INCREMENT PRIMARY KEY";
+            $DB->execute($sql);
+            mtrace("Converted <strong>$lsqlcstring</strong> to auto-incrementing table.<br><br>\n");
         }
 
         // Sanity check if the lsusql tables exist copy them.
         if ($dbman->table_exists($csqlqtable)) {
+            // Create the table if the corresponding AHDQ table exists.
             $sql = "CREATE TABLE IF NOT EXISTS " . $pre . $lsqlqstring . " SELECT * FROM " . $pre . $csqlqstring;
-            // $sql = "ALTER TABLE " . $pre . $csqlqstring . " RENAME TO " . $pre . $lsqlqstring;
             $DB->execute($sql);
             mtrace("Copied <strong>$csqlqstring</strong> table to <strong>$lsqlqstring</strong>.<br><br>\n");
-            // mtrace("Renamed $csqlqstring table to $lsqlqstring.<br><br>\n");
+            // Make sure the table is auto-incrementing.
+            $sql = "ALTER TABLE " . $pre . $lsqlqstring . " CHANGE id id bigint(10) AUTO_INCREMENT PRIMARY KEY";
+            $DB->execute($sql);
+            mtrace("Converted <strong>$lsqlqstring</strong> to auto-incrementing table.<br><br>\n");
         }
 
         // Conditionally add the userlimit field.
