@@ -98,14 +98,19 @@ function report_lsusql_get_element_type($name) {
     return 'text';
 }
 
-function report_lsusql_generate_csv($report, $timenow) {
+function report_lsusql_generate_csv($report, $timenow, $isws) {
     global $DB;
     $starttime = microtime(true);
 
     $sql = report_lsusql_prepare_sql($report, $timenow);
 
     $queryparams = !empty($report->queryparams) ? unserialize($report->queryparams) : array();
-    $querylimit  = $report->querylimit ?? get_config('report_lsusql', 'querylimitdefault');
+
+    if ($isws) {
+        $querylimit  = get_config('report_lsusql', 'querylimitmaximum');
+    } else {
+        $querylimit  = $report->querylimit ?? get_config('report_lsusql', 'querylimitdefault');
+    }
 
     $donotescape = isset($report->donotescape) ? $report->donotescape : 0;
 

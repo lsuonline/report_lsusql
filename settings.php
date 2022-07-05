@@ -25,6 +25,18 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+    global $DB;
+
+    $dformats = array();
+    $sql = "SELECT trim(LEADING 'dataformat_' FROM plugin) AS dataformat
+            FROM mdl_config_plugins
+            WHERE plugin LIKE 'dataformat_%'";
+
+    $dataformats = $DB->get_records_sql($sql);
+
+    foreach ($dataformats as $key => $value) {
+    $dformats[$key] = $value->dataformat;
+    }
 
 if ($ADMIN->fulltree) {
     // Start of week, used for the day to run weekly reports.
@@ -40,6 +52,10 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect('report_lsusql/startwday',
             get_string('startofweek', 'report_lsusql'),
             get_string('startofweek_desc', 'report_lsusql'), -1, $options));
+
+    $settings->add(new admin_setting_configmultiselect('report_lsusql/dataformats',
+            get_string('dataformats', 'report_lsusql'),
+            get_string('dataformats_desc', 'report_lsusql'), array('csv'=>'csv'), $dformats));
 
     $settings->add(new admin_setting_configtext_with_maxlength('report_lsusql/querylimitdefault',
             get_string('querylimitdefault', 'report_lsusql'),

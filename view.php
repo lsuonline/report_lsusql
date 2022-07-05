@@ -141,7 +141,7 @@ if ($report->runable == 'manual') {
     }
 
     try {
-        $csvtimestamp = report_lsusql_generate_csv($report, time());
+        $csvtimestamp = report_lsusql_generate_csv($report, time(), false);
         // Get the updated execution times.
         $report = $DB->get_record('report_lsusql_queries', array('id' => $id));
     } catch (Exception $e) {

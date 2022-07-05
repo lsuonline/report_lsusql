@@ -127,7 +127,6 @@ class report_lsusql_edit_form extends moodleform {
                             , get_string('donotescape', 'report_lsusql')
                             , array(0, 1)
                             , 0);
-        $mform->disabledIf('donotescape', 'runable', 'eq', 'manual');
 
         $mform->addElement('text', 'customdir', get_string('customdir', 'report_lsusql'), 'size = 70');
         $mform->setType('customdir', PARAM_PATH);

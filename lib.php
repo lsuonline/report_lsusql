@@ -75,14 +75,14 @@ function report_lsusql_pluginfile($course, $cm, $context, $filearea, $args, $for
     $url  = ($_SERVER['REQUEST_URI']);
     $ws   = '/webservice/ixs';
     preg_match_all($ws, $url, $wsmatches, PREG_SET_ORDER, 0);
-    $isws = count($wsmatches);
+    $isws = count($wsmatches) > 0 ? true : false;
 
     if (!empty($report->capability)) {
         // The normal requirement.
         require_capability($report->capability, $context);
 
         // Make sure we have permissions to DL the report.
-        if ($isws > 0) {
+        if ($isws) {
             // Only allow priveleged named users to download in a webservice context.
             $alloweduser = $report->capability == 'report/lsusql:view'
                        ? has_capability($report->capability, $context)
@@ -122,7 +122,7 @@ function report_lsusql_pluginfile($course, $cm, $context, $filearea, $args, $for
         if ($report->runable !== 'manual') {
             $runtime = $report->lastrun;
         }
-        $csvtimestamp = \report_lsusql_generate_csv($report, $runtime);
+        $csvtimestamp = \report_lsusql_generate_csv($report, $runtime, $isws);
     }
     list($csvfilename) = report_lsusql_csv_filename($report, $csvtimestamp);
 
@@ -142,6 +142,13 @@ function report_lsusql_pluginfile($course, $cm, $context, $filearea, $args, $for
     fclose($handle);
 
     $filename = clean_filename($report->displayname);
+
+    $allowedformats = explode(',', get_config('report_lsusql', 'dataformats'));
+
+    if (!in_array ($dataformat, $allowedformats)) {
+        throw new \moodle_exception('invalidformat', 'report_lsusql',
+                report_lsusql_url('index.php'), $id);
+    }
 
     \core\dataformat::download_data($filename, $dataformat, $fields, $rows->getIterator(), function(array $row) use ($dataformat) {
         // HTML export content will need escaping.

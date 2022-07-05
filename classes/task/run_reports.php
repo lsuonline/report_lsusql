@@ -85,7 +85,7 @@ class run_reports extends \core\task\scheduled_task {
         foreach ($reportstorun as $report) {
             mtrace("... Running report " . report_lsusql_plain_text_report_name($report));
             try {
-                report_lsusql_generate_csv($report, $timenow);
+                report_lsusql_generate_csv($report, $timenow, false);
             } catch (\Exception $e) {
                 $info = get_exception_info($e);
                 mtrace("... REPORT FAILED " . $info->message);
