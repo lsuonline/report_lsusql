@@ -60,9 +60,9 @@ class renderer extends plugin_renderer_base {
             get_string('backtocategory', 'report_lsusql', $category->name));
 
         $context = [
-            'editaction' => $editaction,
-            'deleteaction' => $deleteaction,
-            'backtocategoryaction' => $backtocategoryaction
+            'editaction' => isset($editaction) ? $editaction : '',
+            'deleteaction' => isset($deleteaction) ? $deleteaction : '',
+            'backtocategoryaction' => isset($backtocategoryaction) ? $backtocategoryaction : ''
         ];
 
         return $this->render_from_template('report_lsusql/query_actions', $context);

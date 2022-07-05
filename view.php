@@ -41,7 +41,7 @@ if (!$report) {
 $permittedusers = !empty($report->userlimit) ? array_map('trim', explode(',', $report->userlimit)) : array($USER->username);
 
 $category = $DB->get_record('report_lsusql_categories', ['id' => $report->categoryid], '*', MUST_EXIST);
-$mainurl = $CFG->wwwroot . '/report/customsql/index.php';
+$mainurl = $CFG->wwwroot . '/report/lsusql/index.php';
 
 $embed = optional_param('embed', 0, PARAM_BOOL);
 $urlparams['embed'] = $embed;
@@ -62,9 +62,13 @@ $output = $PAGE->get_renderer('report_lsusql');
 $context = context_system::instance();
 if (!empty($report->capability)) {
     require_capability($report->capability, $context);
-    $alloweduser = ((has_capability($report->capability, $context)
-        && in_array ($USER->username, $permittedusers))
-        || is_siteadmin($USER->id));
+
+    $alloweduser = $report->capability == 'report/lsusql:view'
+               ? has_capability($report->capability, $context)
+                   && in_array ($USER->username, $permittedusers)
+                   || is_siteadmin($USER->id)
+               : has_capability($report->capability, $context)
+                   || is_siteadmin($USER->id);
     if (!$alloweduser) {
         redirect($mainurl, get_string('noaccess', 'report_lsusql'), 5);
     }

@@ -30,9 +30,9 @@
  * Generated reports can also be downloaded via webservice/pluginfile.
  *
  * Example url for download:
- * /pluginfile/<contextid>/report_lsusql/download/<reportid>/?dataformat=csv&parameter1=value1&parameter2=value2
+ * /pluginfile.php/<contextid>/report_lsusql/download/<reportid>/?dataformat=csv&parameter1=value1&parameter2=value2
  * Example url for download via WS:
- * /webservice/pluginfile/<contextid>/report_lsusql/download/<reportid>/?token=<wstoken>&dataformat=csv&parameter1=value1&parameter2=value2
+ * /webservice/pluginfile.php/<contextid>/report_lsusql/download/<reportid>/?token=<wstoken>&dataformat=csv&parameter1=value1&parameter2=value2
  *
  * Exits if the required permissions are not satisfied.
  *
@@ -46,7 +46,7 @@
  * @return bool false if file not found, does not return if found - just send the file
  */
 function report_lsusql_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    global $CFG, $DB;
+    global $CFG, $DB, $USER;
 
     require_once(dirname(__FILE__) . '/locallib.php');
 
@@ -69,8 +69,39 @@ function report_lsusql_pluginfile($course, $cm, $context, $filearea, $args, $for
 
     require_login();
     $context = context_system::instance();
+    $permittedusers = !empty($report->userlimit) ? array_map('trim', explode(',', $report->userlimit)) : array($USER->username);
+
+    // Limit webservice and direct downloading of file to those EXPLICITLY allowed to download.
+    $url  = ($_SERVER['REQUEST_URI']);
+    $ws   = '/webservice/ixs';
+    preg_match_all($ws, $url, $wsmatches, PREG_SET_ORDER, 0);
+    $isws = count($wsmatches);
+
     if (!empty($report->capability)) {
+        // The normal requirement.
         require_capability($report->capability, $context);
+
+        // Make sure we have permissions to DL the report.
+        if ($isws > 0) {
+            // Only allow priveleged named users to download in a webservice context.
+            $alloweduser = $report->capability == 'report/lsusql:view'
+                       ? has_capability($report->capability, $context)
+                           && in_array ($USER->username, $permittedusers)
+                       : false;
+        } else {
+            // Allow all priveleged + named users to download.
+            $alloweduser = $report->capability == 'report/lsusql:view'
+                       ? (has_capability($report->capability, $context)
+                           && in_array ($USER->username, $permittedusers))
+                           || is_siteadmin($USER->id)
+                       : has_capability($report->capability, $context)
+                           || is_siteadmin($USER->id);
+        }
+        // If the user cannot download, throw an exception.
+        if (!$alloweduser) {
+        throw new \moodle_exception('noaccess', 'report_lsusql',
+                report_lsusql_url('index.php'), $id);
+        }
     }
 
     $queryparams = report_lsusql_get_query_placeholders_and_field_names($report->querysql);
