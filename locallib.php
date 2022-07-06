@@ -547,7 +547,7 @@ function report_lsusql_write_csv_row($handle, $data, $donotescape) {
             });
         }
 
-        // For XML and other specific outputs.
+        // For specific csv outputs.
         // Ony bypasses escaping the data if it is output via CLI AND the report itself requests $donotescape.
         if (php_sapi_name() === 'cli' && $donotescape) {
             $escapeddata[] = $value;
