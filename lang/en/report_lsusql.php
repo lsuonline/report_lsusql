@@ -209,4 +209,4 @@ $string['badwords_help'] = 'Here you can add a colon (:) separated list of key,v
 $string['noaccess'] = 'You are not allowed to view or download this report. Please contact your report administrator for assistance.';
 $string['invalidformat'] = 'You are not allowed to download this data via webservices in the requested dataformat.';
 $string['dataformats'] = 'Allowed Data Formats';
-$string['dataformats_desc'] = 'Dataformats you allow webservice clients to download.';
+$string['dataformats_desc'] = 'Dataformats you allow WebUI, direct download, and webservice clients to download.';
