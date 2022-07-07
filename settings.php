@@ -26,8 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+// Grab this for getting the dataformat plugins.
 require_once($CFG->libdir . '/classes/plugin_manager.php');
+
+// Set the enabled dataformats.
 $dformats = core_plugin_manager::instance()->get_plugins_of_type('dataformat');
+
+// Build an array of dataformats for use in settings.
 $dfoptions = array();
 foreach ($dformats as $key => $dformat) {
     if ($dformat->is_enabled()) {
