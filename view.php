@@ -235,10 +235,17 @@ if (is_null($csvtimestamp)) {
         if (!empty($paramvalues)) {
             $urlparams = $paramvalues;
         }
+
         $urlparams['timestamp'] = $csvtimestamp;
+
+        // Instantiate the LSUSQL downloader.
         $downloadurl = report_lsusql_downloadurl($id, $urlparams);
-        echo $OUTPUT->download_dataformat_selector(get_string('downloadthisreportas', 'report_lsusql'),
+
+        $lsusqlselector = download_lsusql_dataformat_selector(get_string('downloadthisreportas', 'report_lsusql'),
             $downloadurl, 'dataformat', $urlparams);
+
+        // Output the LSUSQL downloader.
+        echo $lsusqlselector;
     }
 }
 

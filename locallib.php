@@ -31,6 +31,59 @@ require_once($CFG->libdir . '/validateurlsyntax.php');
 
 define('REPORT_LSUSQL_LIMIT_EXCEEDED_MARKER', '-- ROW LIMIT EXCEEDED --');
 
+/**
+ * Returns a dataformat selection and download form
+ *
+ * @param string $label A text label
+ * @param moodle_url|string $base The download page url
+ * @param string $name The query param which will hold the type of the download
+ * @param array $params Extra params sent to the download page
+ * @return string HTML fragment
+ */
+function download_lsusql_dataformat_selector($label, $base, $name = 'dataformat', $params = array()) {
+    global $PAGE;
+
+    // Grab all the data formats.
+    $formats = core_plugin_manager::instance()->get_plugins_of_type('dataformat');
+
+    // Grab the LSUSQL explicitly allowed formats.
+    $allowedformats = explode(',', get_config('report_lsusql', 'dataformats'));
+
+    // Build the options for the form.
+    $options = array();
+    foreach ($formats as $format) {
+        // Only show the enabled explicitly allowed formats.
+        if ($format->is_enabled() && in_array($format->name, $allowedformats)) {
+            $options[]       = array(
+                'value'      => $format->name,
+                'label'      => get_string('dataformat', $format->component),
+            );
+        }
+    }
+    $hiddenparams = array();
+    foreach ($params as $key => $value) {
+        $hiddenparams[]      = array(
+            'name'           => $key,
+            'value'          => $value,
+        );
+    }
+    $data = array(
+        'label'              => $label,
+        'base'               => $base,
+        'name'               => $name,
+        'params'             => $hiddenparams,
+        'options'            => $options,
+        'sesskey'            => sesskey(),
+        'submit'             => get_string('download'),
+    );
+
+    // Instantiate the core renderer.
+    $cr = new core_renderer($PAGE, $data);
+
+    // Return the download selector.
+    return $cr->render_from_template('core/dataformat_selector', $data);
+}
+
 function report_lsusql_execute_query($sql, $params = null, $limitnum = null) {
     global $CFG, $DB;
 
