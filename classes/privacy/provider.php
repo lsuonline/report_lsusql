@@ -59,9 +59,11 @@ class provider implements
                 'queryparams' => 'privacy:metadata:reportlsusqlqueries:queryparams',
                 'querylimit' => 'privacy:metadata:reportlsusqlqueries:querylimit',
                 'capability' => 'privacy:metadata:reportlsusqlqueries:capability',
+                'userlimit' => 'privacy:metadata:reportlsusqlqueries:userlimit',
                 'lastrun' => 'privacy:metadata:reportlsusqlqueries:lastrun',
                 'lastexecutiontime' => 'privacy:metadata:reportlsusqlqueries:lastexecutiontime',
                 'runable' => 'privacy:metadata:reportlsusqlqueries:runable',
+                'donotescape' => 'privacy:metadata:reportlsusqlqueries:donotescape',
                 'singlerow' => 'privacy:metadata:reportlsusqlqueries:singlerow',
                 'at' => 'privacy:metadata:reportlsusqlqueries:at',
                 'emailto' => 'privacy:metadata:reportlsusqlqueries:emailto',
@@ -142,9 +144,11 @@ class provider implements
                     $data['queryparams'] = $record->queryparams;
                     $data['querylimit'] = $record->querylimit;
                     $data['capability'] = $record->capability;
+                    $data['userlimit'] = $record->userlimit;
                     $data['lastrun'] = userdate($record->lastrun);
                     $data['lastexecutiontime'] = $record->lastexecutiontime;
                     $data['runable'] = $record->runable;
+                    $data['donotescape'] = $record->donotescape;
                     $data['singlerow'] = $record->singlerow;
                     $data['at'] = $record->at;
                     $data['emailto'] = $record->emailto;
